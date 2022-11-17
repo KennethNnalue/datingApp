@@ -1,5 +1,5 @@
 import { AccountService } from './../../services/account.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
   register() {
     this.accountservice.register(this.model).subscribe({
       next: (res) => console.log(res),
-      error: (err) => console.log(err),
+      error: (err) => this.accountservice.openSnackBar(err.error.title),
     });
     this.cancel();
   }

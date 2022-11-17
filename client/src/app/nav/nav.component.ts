@@ -1,7 +1,7 @@
 import { AccountService } from './../services/account.service';
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { User } from '../interfaces/user';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-nav',
@@ -10,19 +10,27 @@ import { User } from '../interfaces/user';
 })
 export class NavComponent implements OnInit {
   model: any = {};
+  username: string | undefined;
 
-  constructor(public accountService: AccountService) {}
+  constructor(public accountService: AccountService, private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.accountService.currentUser$.subscribe((user: any) => {
+      if (user) this.username = user.username;
+    });
+  }
 
   login() {
     this.accountService.login(this.model).subscribe({
-      next: (res) => console.log(res),
-      error: (err) => console.log(err),
+      next: (res) => {
+        this.router.navigateByUrl('/members');
+      },
+      error: (err) => this.accountService.openSnackBar(err.error),
     });
   }
 
   logout() {
     this.accountService.logout();
+    this.router.navigateByUrl('/');
   }
 }
