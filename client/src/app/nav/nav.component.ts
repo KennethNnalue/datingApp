@@ -25,7 +25,7 @@ export class NavComponent implements OnInit {
       next: (res) => {
         this.router.navigateByUrl('/members');
       },
-      error: (err) => this.accountService.openSnackBar(err.error),
+      // error: (err) => this.accountService.openSnackBar(err.error),
     });
   }
 
