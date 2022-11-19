@@ -1,19 +1,38 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using API.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            // Build our application and save into a host
+           var host =  CreateHostBuilder(args).Build();
+           using var scope = host.Services.CreateScope();
+           var services = scope.ServiceProvider;
+
+           // We don't have acess to our global error handling here
+           // hence we are using try catch blocks
+
+           try
+           {
+               var context = services.GetRequiredService<DataContext>();
+
+               // Update our database with the latest migration
+               await context.Database.MigrateAsync();
+
+               // save our test data into the database
+               await Seed.SeedUsers(context);
+
+           }
+           catch (Exception exception)
+           {
+               
+              var logger = services.GetRequiredService<ILogger<Program>>();
+              logger.LogError(exception, "An error occurred during migration");
+           }
+            await host.RunAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

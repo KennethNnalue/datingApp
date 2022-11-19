@@ -39,7 +39,7 @@ export class ErrorInterceptor implements HttpInterceptor {
               break;
 
             case 401:
-              this.accountService.openSnackBar(error.error);
+              this.accountService.openSnackBar(error.statusText);
               break;
 
             case 404:
