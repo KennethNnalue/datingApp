@@ -34,7 +34,6 @@ export class MemberDetailsComponent implements OnInit {
     if (this.memberUsername != null) {
       this.memberService.getMember(this.memberUsername).subscribe((member) => {
         this.member = member;
-        console.log(this.member);
       });
     }
   }
