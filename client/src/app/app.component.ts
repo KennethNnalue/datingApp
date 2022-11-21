@@ -1,5 +1,5 @@
 import { AccountService } from './services/account.service';
-import { User } from './interfaces/user';
+import { User } from './interfaces/api/user';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
